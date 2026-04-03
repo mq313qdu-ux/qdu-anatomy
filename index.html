@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة QDU للاختبار التفاعلي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #f4f7fb;
+            --bg-card: #ffffff;
+            --primary: #0066cc;
+            --primary-light: #e6f0fa;
+            --secondary: #5c728a;
+            --success: #28a745;
+            --danger: #dc3545;
+            --text-main: #2c3e50;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --img-bg: #f8fafc;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-lg: 16px;
+        }
+
+        [data-theme="dark"] {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --primary: #3b82f6;
+            --primary-light: #1e3a8a;
+            --secondary: #94a3b8;
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+            --border: #334155;
+            --img-bg: #0f172a;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 2.5rem 1rem;
+            text-align: center;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .header-actions {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .subtitle {
+            color: var(--secondary);
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            font-weight: 600;
+        }
+
+        /* Home Screen Selection */
+        .home-screen {
+            width: 95%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .home-screen h2 {
+            margin-bottom: 2rem;
+            color: var(--text-main);
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .image-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .image-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .image-card.all-images {
+            background: linear-gradient(135deg, var(--primary), #00a8ff);
+            color: white;
+            border: none;
+        }
+        
+        .image-card.all-images i, .image-card.all-images h3 {
+            color: white;
+        }
+
+        .image-card.all-images:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 102, 204, 0.3);
+        }
+
+        /* Quiz Container */
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            width: 95%;
+            max-width: 1200px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        @media (min-width: 992px) {
+            .quiz-container {
+                flex-direction: row;
+            }
+        }
+
+        .image-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 2px solid var(--border);
+            background: var(--img-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 250px;
+        }
+
+        @media (min-width: 768px) {
+            .image-wrapper {
+                min-height: 400px;
+            }
+        }
+
+        .image-wrapper img {
+            max-width: 100%;
+            max-height: 600px;
+            object-fit: contain;
+        }
+        
+        .no-image-text {
+            position: absolute;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .back-btn {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .back-btn:hover {
+            background: #d0e3f5;
+        }
+
+        .quiz-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .question-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .score-display {
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .question-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+            color: var(--text-main);
+        }
+
+        .highlight-number {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            width: 45px;
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            border-radius: 50%;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.4rem;
+            margin: 0 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 102, 204, 0.2);
+            font-weight: 800;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-btn {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .option-btn.correct {
+            background: #d4edda;
+            border-color: var(--success);
+            color: #155724;
+        }
+
+        .option-btn.wrong {
+            background: #f8d7da;
+            border-color: var(--danger);
+            color: #721c24;
+            animation: shake 0.4s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+        .icon-indicator {
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .option-btn.correct .icon-indicator,
+        .option-btn.wrong .icon-indicator {
+            opacity: 1;
+        }
+
+        .controls {
+            margin-top: auto;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .next-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+            box-shadow: 0 4px 10px rgba(0, 102, 204, 0.3);
+        }
+
+        .next-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .trophy-icon {
+            font-size: 5rem;
+            color: #ffc107;
+            margin-bottom: 1rem;
+        }
+
+        .final-score {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .restart-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 2rem;
+        }
+
+        .restart-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-actions">
+            <button class="action-btn" id="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع الليلي"><i class="fa-solid fa-moon"></i></button>
+            <button class="action-btn" id="fullscreen-toggle" onclick="toggleFullScreen()" title="وضع ملء الشاشة"><i class="fa-solid fa-expand"></i></button>
+        </div>
+        <h1>منصة QDU للاختبار التفاعلي</h1>
+        <p class="subtitle">التشريح العملي | إعداد الطالب مقتدى الكناني</p>
+    </header>
+
+    <!-- Home Screen -->
+    <div class="home-screen" id="home-screen">
+        <h2>اختر الصورة للبدء في تشخيص المعالم</h2>
+        <div class="image-grid">
+            <div class="image-card" onclick="startQuiz('image1.jpg')">
+                <i class="fa-regular fa-image"></i>
+                <span>الصورة 1</span>
+            </div>
+            <div class="image-card" onclick="startQuiz('image2.jpg')">
+                <i class="fa-regular fa-image"></i>
+                <span>الصورة 2</span>
+            </div>
+            <div class="image-card" onclick="startQuiz('image3.jpg')">
+                <i class="fa-regular fa-image"></i>
+                <span>الصورة 3</span>
+            </div>
+            <div class="image-card" onclick="startQuiz('image4.jpg')">
+                <i class="fa-regular fa-image"></i>
+                <span>الصورة 4</span>
+            </div>
+            <div class="image-card" onclick="startQuiz('image5.jpg')">
+                <i class="fa-regular fa-image"></i>
+                <span>الصورة 5</span>
+            </div>
+            <div class="image-card" onclick="startQuiz('image6.jpg')">
+                <i class="fa-regular fa-image"></i>
+                <span>الصورة 6</span>
+            </div>
+            <div class="image-card" onclick="startQuiz('image7.jpg')">
+                <i class="fa-regular fa-image"></i>
+                <span>الصورة 7</span>
+            </div>
+            <div class="image-card all-images" onclick="startQuiz('all')">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>امتحان شامل بجميع الصور</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Container -->
+    <div class="quiz-container" id="quiz-app">
+        <!-- Image Section -->
+        <div class="image-col">
+            <div class="image-wrapper" id="img-container">
+                <div class="no-image-text" id="no-image-msg">
+                    <i class="fa-regular fa-image" style="font-size: 4rem; opacity: 0.5; margin-bottom: 1rem;"></i>
+                    <p>معاينة الصورة ستظهر هنا</p>
+                </div>
+                <img id="anatomy-image" src="" alt="صورة تشريحية" style="display: none;" onerror="this.style.display='none'; document.getElementById('no-image-msg').style.display='block';">
+            </div>
+            <button class="back-btn" onclick="backToHome()"><i class="fa-solid fa-house"></i> العودة للرئيسية</button>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="quiz-col" id="quiz-content">
+            <div class="progress-header">
+                <div class="question-number">السؤال <span id="current-q">1</span> من <span id="total-q">9</span></div>
+                <div class="score-display"><i class="fa-solid fa-check" style="color: var(--success);"></i> صحيح: <span id="score">0</span></div>
+            </div>
+
+            <div class="question-text" id="question-text">
+                ماذا يمثل التأشير رقم <span class="highlight-number" id="pointer-num">1</span> في الصورة؟
+            </div>
+
+            <div class="options-grid" id="options-grid">
+                <!-- Options will be injected here -->
+            </div>
+
+            <div class="controls">
+                <button class="next-btn" id="next-btn">السؤال التالي <i class="fa-solid fa-arrow-left"></i></button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="quiz-col results-screen" id="results-screen">
+            <i class="fa-solid fa-trophy trophy-icon"></i>
+            <h2>اكتمل الاختبار!</h2>
+            <p style="color: var(--text-muted); margin: 1rem 0;">أكملت اختبار تحديد المعالم التشريحية بنجاح</p>
+            <div class="final-score"><span id="final-score-val">0</span> / <span id="total-score-val">9</span></div>
+            <button class="restart-btn" id="restart-btn"><i class="fa-solid fa-rotate-right"></i> إعادة الاختبار لنفس المجموعة</button>
+        </div>
+    </div>
+
+    <!-- Audio Effects from Mixkit -->
+    <audio id="correct-sound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
+    <audio id="wrong-sound" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" preload="auto"></audio>
+
+    <script>
+        const fullQuizData = [
+            // Image 1 (Frontal)
+            { imageSrc: "image1.jpg", autoCrop: false, pointerNumber: 1,  correctAnswer: "Sagittal suture", options: ["Coronal suture", "Sagittal suture", "Lambdoid suture", "Squamosal suture"] },
+            { imageSrc: "image1.jpg", autoCrop: false, pointerNumber: 4,  correctAnswer: "Frontal sinus", options: ["Ethmoid air cells", "Maxillary sinus", "Sphenoid sinus", "Frontal sinus"] },
+            { imageSrc: "image1.jpg", autoCrop: false, pointerNumber: 6,  correctAnswer: "Crista galli", options: ["Crista galli", "Cribriform plate", "Optic canal", "Sella turcica"] },
+            { imageSrc: "image1.jpg", autoCrop: false, pointerNumber: 9,  correctAnswer: "Nasal septum", options: ["Inferior nasal concha", "Middle nasal concha", "Nasal septum", "Vomer"] },
+            { imageSrc: "image1.jpg", autoCrop: false, pointerNumber: 14, correctAnswer: "Innominate line", options: ["Arcuate eminence", "Linea aspera", "Temporal line", "Innominate line"] },
+            { imageSrc: "image1.jpg", autoCrop: false, pointerNumber: 16, correctAnswer: "Zygomaticofrontal suture", options: ["Zygomaticomaxillary suture", "Zygomaticofrontal suture", "Frontoethmoidal suture", "Squamosal suture"] },
+            { imageSrc: "image1.jpg", autoCrop: false, pointerNumber: 20, correctAnswer: "Maxillary sinus", options: ["Maxillary sinus", "Sphenoid sinus", "Frontal sinus", "Ethmoid air cells"] },
+            { imageSrc: "image1.jpg", autoCrop: false, pointerNumber: 25, correctAnswer: "Mastoid process", options: ["Styloid process", "Zygomatic process", "Mastoid process", "Condylar process"] },
+            { imageSrc: "image1.jpg", autoCrop: false, pointerNumber: 29, correctAnswer: "Angle of mandible", options: ["Mental foramen", "Angle of mandible", "Coronoid process", "Mandibular notch"] },
+            
+            // Image 2 (Lateral)
+            { imageSrc: "image2.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Bregma", options: ["Bregma", "Lambda", "Vertex", "Pterion"] },
+            { imageSrc: "image2.jpg", autoCrop: false, pointerNumber: 2, correctAnswer: "Coronal suture", options: ["Sagittal suture", "Coronal suture", "Lambdoid suture", "Squamosal suture"] },
+            { imageSrc: "image2.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Lambda", options: ["Bregma", "Asterion", "Lambda", "Inion"] },
+            { imageSrc: "image2.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "Lambdoid suture", options: ["Sagittal suture", "Coronal suture", "Lambdoid suture", "Frontal suture"] },
+            { imageSrc: "image2.jpg", autoCrop: false, pointerNumber: 5, correctAnswer: "Vertex", options: ["Bregma", "Glabella", "Vertex", "Nasion"] },
+            { imageSrc: "image2.jpg", autoCrop: false, pointerNumber: 16, correctAnswer: "Pituitary fossa (sella turcica)", options: ["Optic canal", "Pituitary fossa (sella turcica)", "Foramen magnum", "Internal acoustic meatus"] },
+            { imageSrc: "image2.jpg", autoCrop: false, pointerNumber: 19, correctAnswer: "Greater wings of sphenoid", options: ["Lesser wings of sphenoid", "Greater wings of sphenoid", "Petrous part of temporal bone", "Crista galli"] },
+            { imageSrc: "image2.jpg", autoCrop: false, pointerNumber: 34, correctAnswer: "Frontal sinus", options: ["Maxillary sinus", "Sphenoid sinus", "Ethmoid air cells", "Frontal sinus"] },
+            { imageSrc: "image2.jpg", autoCrop: false, pointerNumber: 35, correctAnswer: "Sphenoid sinus", options: ["Maxillary sinus", "Ethmoid air cells", "Sphenoid sinus", "Frontal sinus"] },
+            { imageSrc: "image2.jpg", autoCrop: false, pointerNumber: 36, correctAnswer: "Posterior ethmoidal cells", options: ["Anterior ethmoidal cells", "Posterior ethmoidal cells", "Sphenoid sinus", "Mastoid air cells"] },
+            { imageSrc: "image2.jpg", autoCrop: false, pointerNumber: 37, correctAnswer: "Maxillary sinus", options: ["Frontal sinus", "Sphenoid sinus", "Maxillary sinus", "Ethmoid air cells"] },
+            { imageSrc: "image2.jpg", autoCrop: false, pointerNumber: 38, correctAnswer: "Mastoid air cells", options: ["Mastoid air cells", "Sphenoid sinus", "Ethmoid air cells", "Frontal sinus"] },
+
+            // Image 3
+            { imageSrc: "image3.jpg", autoCrop: false, pointerNumber: 12, correctAnswer: "Nasal septum", options: ["Inferior nasal concha", "Middle nasal concha", "Nasal septum", "Vomer"] },
+            { imageSrc: "image3.jpg", autoCrop: false, pointerNumber: 14, correctAnswer: "Clivus", options: ["Dorsum sellae", "Basiocciput", "Odontoid process", "Clivus"] },
+            { imageSrc: "image3.jpg", autoCrop: false, pointerNumber: 20, correctAnswer: "Sphenoid sinus", options: ["Ethmoid air cells", "Frontal sinus", "Maxillary sinus", "Sphenoid sinus"] },
+            { imageSrc: "image3.jpg", autoCrop: false, pointerNumber: 21, correctAnswer: "Ethmoid air cells", options: ["Sphenoid sinus", "Mastoid air cells", "Frontal sinus", "Ethmoid air cells"] },
+            { imageSrc: "image3.jpg", autoCrop: false, pointerNumber: 22, correctAnswer: "Mastoid air cells", options: ["Ethmoid air cells", "Maxillary sinus", "Sphenoid sinus", "Mastoid air cells"] },
+            { imageSrc: "image3.jpg", autoCrop: false, pointerNumber: 24, correctAnswer: "Maxillary sinus", options: ["Frontal sinus", "Sphenoid sinus", "Ethmoid air cells", "Maxillary sinus"] },
+
+            // Image 4
+            { imageSrc: "image4.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Middle cranial fossa", options: ["Anterior cranial fossa", "Middle cranial fossa", "Posterior cranial fossa", "Sella turcica"] },
+            { imageSrc: "image4.jpg", autoCrop: false, pointerNumber: 2, correctAnswer: "Greater wing of sphenoid bone", options: ["Lesser wing of sphenoid bone", "Petrous temporal bone", "Greater wing of sphenoid bone", "Sphenoid body"] },
+            { imageSrc: "image4.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Frontal bone", options: ["Parietal bone", "Frontal bone", "Occipital bone", "Temporal bone"] },
+            { imageSrc: "image4.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "Anterior cranial fossa", options: ["Anterior cranial fossa", "Middle cranial fossa", "Posterior cranial fossa", "Orbital roof"] },
+            { imageSrc: "image4.jpg", autoCrop: false, pointerNumber: 5, correctAnswer: "external auditory canal", options: ["Internal auditory canal", "external auditory canal", "Jugular foramen", "Carotid canal"] },
+            { imageSrc: "image4.jpg", autoCrop: false, pointerNumber: 6, correctAnswer: "Petrous temporal bone", options: ["Squamous temporal bone", "Greater wing of sphenoid", "Mastoid process", "Petrous temporal bone"] },
+
+            // Image 5
+            { imageSrc: "image5.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Mandibular condyle", options: ["Coronoid process", "Mastoid process", "Mandibular condyle", "Styloid process"] },
+            { imageSrc: "image5.jpg", autoCrop: false, pointerNumber: 2, correctAnswer: "Sphenosquamosal suture", options: ["Coronal suture", "Sphenosquamosal suture", "Squamosal suture", "Sphenofrontal suture"] },
+            { imageSrc: "image5.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Frontal bone", options: ["Frontal bone", "Parietal bone", "Occipital bone", "Temporal bone"] },
+            { imageSrc: "image5.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "Greater wing of sphenoid bone", options: ["Lesser wing of sphenoid", "Temporal bone", "Greater wing of sphenoid bone", "Zygomatic bone"] },
+            { imageSrc: "image5.jpg", autoCrop: false, pointerNumber: 5, correctAnswer: "Temporal bone", options: ["Parietal bone", "Occipital bone", "Temporal bone", "Frontal bone"] },
+            { imageSrc: "image5.jpg", autoCrop: false, pointerNumber: 6, correctAnswer: "Sphenoid sinus", options: ["Sphenoid sinus", "Ethmoid air cells", "Maxillary sinus", "Frontal sinus"] },
+            { imageSrc: "image5.jpg", autoCrop: false, pointerNumber: 7, correctAnswer: "Clivus", options: ["Dorsum sellae", "Sella turcica", "Clivus", "Occipital condyle"] },
+
+            // Image 6
+            { imageSrc: "image6.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Mandibular condyle", options: ["Mandibular condyle", "Coronoid process", "Mastoid process", "Styloid process"] },
+            { imageSrc: "image6.jpg", autoCrop: false, pointerNumber: 2, correctAnswer: "Zygomatic bone", options: ["Maxilla", "Zygomatic bone", "Temporal bone", "Sphenoid bone"] },
+            { imageSrc: "image6.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Ethmoid bone / ethmoid air cells", options: ["Sphenoid sinus", "Maxillary sinus", "Ethmoid bone / ethmoid air cells", "Frontal sinus"] },
+            { imageSrc: "image6.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "Zygomatic arch", options: ["Mandibular notch", "Zygomatic arch", "Coronoid process", "Styloid process"] },
+
+            // Image 7
+            { imageSrc: "image7.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Lateral mass of C1", options: ["Odontoid process (C2)", "Occipital condyle", "Body of C2", "Lateral mass of C1"] },
+            { imageSrc: "image7.jpg", autoCrop: false, pointerNumber: 2, correctAnswer: "Zygomatic bone", options: ["Maxilla", "Nasal bone", "Zygomatic bone", "Lacrimal bone"] },
+            { imageSrc: "image7.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Globe", options: ["Globe", "Lens", "Optic nerve", "Lacrimal gland"] },
+            { imageSrc: "image7.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "Nasal bone", options: ["Maxilla", "Zygomatic bone", "Nasal bone", "Vomer"] },
+            { imageSrc: "image7.jpg", autoCrop: false, pointerNumber: 5, correctAnswer: "Maxillary sinus", options: ["Ethmoid air cells", "Sphenoid sinus", "Maxillary sinus", "Frontal sinus"] },
+            { imageSrc: "image7.jpg", autoCrop: false, pointerNumber: 6, correctAnswer: "Zygomatic arch", options: ["Mandibular ramus", "Zygomatic arch", "Coronoid process", "Maxillary tuberosity"] },
+            { imageSrc: "image7.jpg", autoCrop: false, pointerNumber: 7, correctAnswer: "Pterygoid process (sphenoid bone)", options: ["Styloid process", "Mastoid process", "Pterygoid process (sphenoid bone)", "Greater wing of sphenoid"] },
+            { imageSrc: "image7.jpg", autoCrop: false, pointerNumber: 8, correctAnswer: "Mandible", options: ["Maxilla", "Zygomatic bone", "Mandible", "Palatine bone"] },
+            { imageSrc: "image7.jpg", autoCrop: false, pointerNumber: 9, correctAnswer: "Odontoid process (C2)", options: ["Anterior arch of C1", "Odontoid process (C2)", "Clivus", "Posterior arch of C1"] },
+
+            // Image 8
+            { imageSrc: "image8.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "C1", options: ["C1", "C2", "Occipital condyle", "Odontoid process (C2)"] },
+            { imageSrc: "image8.jpg", autoCrop: false, pointerNumber: 2, correctAnswer: "Pterygoid process", options: ["Styloid process", "Mastoid process", "Pterygoid process", "Zygomatic process"] },
+            { imageSrc: "image8.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Maxillary sinus", options: ["Ethmoid sinus", "Sphenoid sinus", "Maxillary sinus", "Frontal sinus"] },
+            { imageSrc: "image8.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "Zygomatic bone", options: ["Maxilla", "Nasal bone", "Zygomatic bone", "Palatine bone"] },
+            { imageSrc: "image8.jpg", autoCrop: false, pointerNumber: 5, correctAnswer: "Mandible", options: ["Maxilla", "Zygomatic bone", "Mandible", "Sphenoid bone"] },
+            { imageSrc: "image8.jpg", autoCrop: false, pointerNumber: 6, correctAnswer: "Odontoid process (C2)", options: ["Clivus", "Odontoid process (C2)", "Anterior arch of C1", "Basiocciput"] },
+
+            // Image 9
+            { imageSrc: "image9.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Frontal Sinus", options: ["Maxillary Sinus", "Sphenoid Sinus", "Frontal Sinus", "Ethmoid Air Cells"] },
+            { imageSrc: "image9.jpg", autoCrop: false, pointerNumber: 5, correctAnswer: "Bony Nasal Septum", options: ["Vomer", "Bony Nasal Septum", "Inferior Nasal Concha", "Middle Nasal Concha"] },
+            { imageSrc: "image9.jpg", autoCrop: false, pointerNumber: 7, correctAnswer: "Maxillary Sinus", options: ["Sphenoid Sinus", "Frontal Sinus", "Maxillary Sinus", "Ethmoid Sinus"] },
+            { imageSrc: "image9.jpg", autoCrop: false, pointerNumber: 11, correctAnswer: "Maxilla", options: ["Zygomatic Bone", "Mandible", "Palatine Bone", "Maxilla"] },
+            { imageSrc: "image9.jpg", autoCrop: false, pointerNumber: 12, correctAnswer: "Condyle", options: ["Coronoid Process", "Mastoid Process", "Condyle", "Styloid Process"] },
+            { imageSrc: "image9.jpg", autoCrop: false, pointerNumber: 13, correctAnswer: "Mastoid", options: ["Styloid Process", "Pterygoid Process", "Mastoid", "Zygomatic Arch"] },
+            { imageSrc: "image9.jpg", autoCrop: false, pointerNumber: 6, correctAnswer: "Zygomatic Bone", options: ["Maxilla", "Zygomatic Bone", "Temporal Bone", "Nasal Bone"] },
+            { imageSrc: "image9.jpg", autoCrop: false, pointerNumber: 8, correctAnswer: "Zygomatic Arch", options: ["Mandibular Notch", "Coronoid Process", "Zygomatic Arch", "Styloid Process"] },
+            { imageSrc: "image9.jpg", autoCrop: false, pointerNumber: 10, correctAnswer: "Mandible", options: ["Maxilla", "Zygomatic Bone", "Mandible", "Sphenoid Bone"] },
+            { imageSrc: "image9.jpg", autoCrop: false, pointerNumber: 14, correctAnswer: "Odontoid Process", options: ["Clivus", "Odontoid Process", "Anterior arch of C1", "Lateral mass of C1"] },
+
+            // Image 10
+            { imageSrc: "image10.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Frontal Sinus", options: ["Maxillary Sinus", "Sphenoid Sinus", "Ethmoid Sinuses", "Frontal Sinus"] },
+            { imageSrc: "image10.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Nasal Septum", options: ["Inferior Nasal Concha", "Nasal Septum", "Vomer", "Middle Nasal Concha"] },
+            { imageSrc: "image10.jpg", autoCrop: false, pointerNumber: 9, correctAnswer: "Sphenoid Sinuses", options: ["Maxillary Sinus", "Ethmoid Sinuses", "Sphenoid Sinuses", "Frontal Sinus"] },
+            { imageSrc: "image10.jpg", autoCrop: false, pointerNumber: 9, correctAnswer: "Body of Mandible", options: ["Symphysis Menti", "Ramus of Mandible", "Angle of Mandible", "Body of Mandible"] },
+            { imageSrc: "image10.jpg", autoCrop: false, pointerNumber: 12, correctAnswer: "Odontoid Process", options: ["Clivus", "Lateral mass of C1", "Odontoid Process", "Anterior arch of C1"] },
+
+            // Image 11
+            { imageSrc: "image11.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Sagittal Suture", options: ["Coronal Suture", "Lambdoid Suture", "Sagittal Suture", "Squamosal Suture"] },
+            { imageSrc: "image11.jpg", autoCrop: false, pointerNumber: 2, correctAnswer: "Lambdoid Suture", options: ["Coronal Suture", "Sagittal Suture", "Squamosal Suture", "Lambdoid Suture"] },
+            { imageSrc: "image11.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Frontal Sinus", options: ["Maxillary Sinus", "Sphenoid Sinus", "Frontal Sinus", "Ethmoid Sinuses"] },
+            { imageSrc: "image11.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "Ethmoid Sinuses", options: ["Maxillary Sinus", "Sphenoid Sinus", "Ethmoid Sinuses", "Mastoid Air Cells"] },
+            { imageSrc: "image11.jpg", autoCrop: false, pointerNumber: 6, correctAnswer: "Mastoid Air Cells", options: ["Ethmoid Sinuses", "Sphenoid Sinus", "Maxillary Sinus", "Mastoid Air Cells"] },
+            { imageSrc: "image11.jpg", autoCrop: false, pointerNumber: 10, correctAnswer: "Maxillary Sinus", options: ["Frontal Sinus", "Sphenoid Sinus", "Maxillary Sinus", "Ethmoid Sinuses"] },
+            { imageSrc: "image11.jpg", autoCrop: false, pointerNumber: 11, correctAnswer: "Nasal Septum", options: ["Vomer", "Inferior Nasal Concha", "Nasal Septum", "Middle Nasal Concha"] },
+
+            // Image 12
+            { imageSrc: "image12.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Frontal Sinuses", options: ["Maxillary Sinuses", "Sphenoid Sinuses", "Frontal Sinuses", "Ethmoid Sinuses"] },
+            { imageSrc: "image12.jpg", autoCrop: false, pointerNumber: 2, correctAnswer: "Ethmoid Sinuses", options: ["Maxillary Sinuses", "Sphenoid Sinuses", "Frontal Sinuses", "Ethmoid Sinuses"] },
+            { imageSrc: "image12.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "Sphenoid Sinuses", options: ["Maxillary Sinuses", "Ethmoid Sinuses", "Sphenoid Sinuses", "Frontal Sinuses"] },
+            { imageSrc: "image12.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Maxillary Sinuses", options: ["Frontal Sinuses", "Sphenoid Sinuses", "Maxillary Sinuses", "Ethmoid Sinuses"] },
+
+            // Image 13
+            { imageSrc: "image13.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Acromion", options: ["Coracoid process", "Clavicle", "Spine of scapula", "Acromion"] },
+            { imageSrc: "image13.jpg", autoCrop: false, pointerNumber: 2, correctAnswer: "Coracoid process", options: ["Acromion", "Coracoid process", "Glenoid cavity", "Clavicle"] },
+            { imageSrc: "image13.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Body of scapula", options: ["Infraspinous fossa", "Subscapular fossa", "Body of scapula", "Supraspinous fossa"] },
+            { imageSrc: "image13.jpg", autoCrop: false, pointerNumber: 5, correctAnswer: "Humerus", options: ["Radius", "Ulna", "Clavicle", "Humerus"] },
+
+            // Image 14
+            { imageSrc: "image14.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Crista galli", options: ["Cribriform plate", "Crista galli", "Perpendicular plate", "Vomer"] },
+            { imageSrc: "image14.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "zygomatic bone", options: ["Maxilla", "Nasal bone", "zygomatic bone", "Temporal bone"] },
+            { imageSrc: "image14.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "Mandible", options: ["Maxilla", "zygomatic bone", "Mandible", "Sphenoid bone"] },
+            { imageSrc: "image14.jpg", autoCrop: false, pointerNumber: 5, correctAnswer: "inf. Nasal concha", options: ["middle nasal concha", "sup. Nasal concha", "inf. Nasal concha", "Nasal septum"] },
+            { imageSrc: "image14.jpg", autoCrop: false, pointerNumber: 6, correctAnswer: "Nasal septum", options: ["Vomer", "Perpendicular plate", "Nasal septum", "inf. Nasal concha"] },
+            { imageSrc: "image14.jpg", autoCrop: false, pointerNumber: 7, correctAnswer: "middle nasal concha", options: ["inf. Nasal concha", "superior nasal concha", "middle nasal concha", "Vomer"] },
+
+            // Image 15
+            { imageSrc: "image15.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Frontal bone", options: ["Parietal bone", "Frontal bone", "Occipital bone", "Nasal bone"] },
+            { imageSrc: "image15.jpg", autoCrop: false, pointerNumber: 2, correctAnswer: "Perpendicular plate", options: ["Vomer bone", "Nasal septum", "Perpendicular plate", "Crista galli"] },
+            { imageSrc: "image15.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Vomer bone", options: ["Perpendicular plate", "Vomer bone", "Palatine bone", "Nasal bone"] },
+            { imageSrc: "image15.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "maxilla", options: ["Zygomatic bone", "Mandible", "maxilla", "Palatine bone"] },
+
+            // Image 16
+            { imageSrc: "image16.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Nasolacrimal duct", options: ["Optic canal", "Nasolacrimal duct", "Infraorbital foramen", "Superior orbital fissure"] },
+            { imageSrc: "image16.jpg", autoCrop: false, pointerNumber: 2, correctAnswer: "Globe", options: ["Lens", "Optic nerve", "Globe", "Lacrimal gland"] },
+            { imageSrc: "image16.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Frontal sinus", options: ["Maxillary sinus", "Ethmoid air cells", "Sphenoid sinus", "Frontal sinus"] },
+            { imageSrc: "image16.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "Frontal bone", options: ["Parietal bone", "Frontal bone", "Nasal bone", "Maxilla"] },
+            { imageSrc: "image16.jpg", autoCrop: false, pointerNumber: 5, correctAnswer: "Zygomatic bone", options: ["Maxilla", "Temporal bone", "Sphenoid bone", "Zygomatic bone"] },
+
+            // Image 17
+            { imageSrc: "image17.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Maxillary bone and sinus", options: ["Zygomatic bone", "Sphenoid sinus", "Maxillary bone and sinus", "Ethmoid sinus"] },
+            { imageSrc: "image17.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Cribriform plate (ethmoid)", options: ["Crista galli", "Cribriform plate (ethmoid)", "Perpendicular plate", "Optic canal"] },
+            { imageSrc: "image17.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "Frontal bone and sinus", options: ["Parietal bone", "Sphenoid sinus", "Frontal bone and sinus", "Nasal bone"] },
+            { imageSrc: "image17.jpg", autoCrop: false, pointerNumber: 5, correctAnswer: "Zygomatic bone", options: ["Maxilla", "Temporal bone", "Sphenoid bone", "Zygomatic bone"] },
+            { imageSrc: "image17.jpg", autoCrop: false, pointerNumber: 6, correctAnswer: "Inferior nasal concha", options: ["Middle nasal concha", "Vomer", "Inferior nasal concha", "Nasal septum"] },
+
+            // Image 18
+            { imageSrc: "image18.jpg", autoCrop: false, pointerNumber: 1, correctAnswer: "Globe of eye", options: ["Lens of eye", "Optic nerve", "Globe of eye", "Lacrimal gland"] },
+            { imageSrc: "image18.jpg", autoCrop: false, pointerNumber: 2, correctAnswer: "Nasal cavity", options: ["Maxillary sinus", "Nasal cavity", "Ethmoid sinus", "Sphenoid sinus"] },
+            { imageSrc: "image18.jpg", autoCrop: false, pointerNumber: 3, correctAnswer: "Vomer", options: ["Perpendicular plate", "Inferior nasal concha", "Vomer", "Nasal septum"] },
+            { imageSrc: "image18.jpg", autoCrop: false, pointerNumber: 4, correctAnswer: "Greater wing of sphenoid", options: ["Lesser wing of sphenoid", "Temporal bone", "Greater wing of sphenoid", "Zygomatic bone"] },
+            { imageSrc: "image18.jpg", autoCrop: false, pointerNumber: 5, correctAnswer: "Clivus", options: ["Dorsum sellae", "Basiocciput", "Odontoid process", "Clivus"] },
+            { imageSrc: "image18.jpg", autoCrop: false, pointerNumber: 6, correctAnswer: "Lens of eye", options: ["Globe of eye", "Optic nerve", "Cornea", "Lens of eye"] },
+            { imageSrc: "image18.jpg", autoCrop: false, pointerNumber: 7, correctAnswer: "Mandibular condyle", options: ["Coronoid process", "Mastoid process", "Styloid process", "Mandibular condyle"] }
+        ];
+
+        const shuffleArray = (array) => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        };
+
+        let currentQuizData = [];
+        let currentImageFilter = 'all';
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const homeScreen = document.getElementById('home-screen');
+        const quizApp = document.getElementById('quiz-app');
+        const imageElement = document.getElementById('anatomy-image');
+        const noImageMsg = document.getElementById('no-image-msg');
+        
+        const pointerNumSpan = document.getElementById('pointer-num');
+        const optionsGrid = document.getElementById('options-grid');
+        const nextBtn = document.getElementById('next-btn');
+        const currentQSpan = document.getElementById('current-q');
+        const scoreSpan = document.getElementById('score');
+        const totalQSpan = document.getElementById('total-q');
+        
+        const quizContent = document.getElementById('quiz-content');
+        const resultsScreen = document.getElementById('results-screen');
+        const restartBtn = document.getElementById('restart-btn');
+
+        const correctSound = document.getElementById('correct-sound');
+        const wrongSound = document.getElementById('wrong-sound');
+
+        function startQuiz(imageFilter) {
+            currentImageFilter = imageFilter;
+            
+            // Filter Data
+            if (imageFilter === 'all') {
+                currentQuizData = [...fullQuizData];
+                // Shuffle questions if all are selected
+                shuffleArray(currentQuizData);
+            } else {
+                currentQuizData = fullQuizData.filter(q => q.imageSrc === imageFilter);
+            }
+            
+            if (currentQuizData.length === 0) {
+                alert("لا توجد أسئلة متوفرة لهذه الصورة حالياً.");
+                return;
+            }
+
+            // UI Transitions
+            homeScreen.style.display = 'none';
+            quizApp.style.display = 'flex';
+            quizContent.style.display = 'flex';
+            resultsScreen.style.display = 'none';
+            
+            // Re-init variables
+            currentQuestionIndex = 0;
+            score = 0;
+            scoreSpan.innerText = score;
+            totalQSpan.innerText = currentQuizData.length;
+            
+            loadQuestion();
+        }
+
+        function backToHome() {
+            homeScreen.style.display = 'flex';
+            quizApp.style.display = 'none';
+        }
+
+        imageElement.onload = function() {
+            noImageMsg.style.display = 'none';
+            imageElement.style.display = 'block';
+        }
+
+        function loadQuestion() {
+            answered = false;
+            nextBtn.style.display = 'none';
+            
+            const currentQ = currentQuizData[currentQuestionIndex];
+            currentQSpan.innerText = currentQuestionIndex + 1;
+            pointerNumSpan.innerText = currentQ.pointerNumber;
+
+            // Manage Image src
+            const filenameFromSrc = imageElement.src.substring(imageElement.src.lastIndexOf('/') + 1) || "";
+            if (filenameFromSrc !== currentQ.imageSrc) {
+                imageElement.src = currentQ.imageSrc;
+                noImageMsg.style.display = 'block';
+                imageElement.style.display = 'none'; // Temporarily hide until loaded
+            }
+
+            optionsGrid.innerHTML = '';
+            
+            let currentOptions = [...currentQ.options];
+            shuffleArray(currentOptions);
+
+            currentOptions.forEach(optionText => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.dir = 'ltr'; 
+                
+                btn.innerHTML = `
+                    <span>${optionText}</span>
+                    <i class="fa-solid fa-circle-check icon-indicator"></i>
+                `;
+                
+                btn.onclick = () => checkAnswer(btn, optionText, currentQ.correctAnswer);
+                optionsGrid.appendChild(btn);
+            });
+        }
+
+        function playSound(type) {
+            try {
+                if (type === 'correct') {
+                    correctSound.currentTime = 0;
+                    correctSound.play().catch(e => console.log('Audio error:', e));
+                } else {
+                    wrongSound.currentTime = 0;
+                    wrongSound.play().catch(e => console.log('Audio error:', e));
+                }
+            } catch(e) {}
+        }
+
+        function checkAnswer(selectedBtn, selectedText, correctText) {
+            if(answered) return;
+            answered = true;
+
+            const allBtns = optionsGrid.querySelectorAll('.option-btn');
+            
+            if (selectedText === correctText) {
+                selectedBtn.classList.add('correct');
+                playSound('correct');
+                score++;
+                scoreSpan.innerText = score;
+                allBtns.forEach(btn => btn.disabled = true);
+                
+                // Auto Advance on correct answer after 800ms
+                setTimeout(() => {
+                    advanceQuestion();
+                }, 800);
+            } else {
+                selectedBtn.classList.add('wrong');
+                selectedBtn.querySelector('.icon-indicator').className = 'fa-solid fa-circle-xmark icon-indicator';
+                playSound('wrong');
+                
+                allBtns.forEach(btn => {
+                    if (btn.querySelector('span').innerText === correctText) {
+                        btn.classList.add('correct');
+                    }
+                });
+                
+                // Show next button only if answer is wrong
+                allBtns.forEach(btn => btn.disabled = true);
+                nextBtn.style.display = 'inline-block';
+            }
+        }
+
+        function advanceQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            advanceQuestion();
+        });
+
+        function showResults() {
+            quizContent.style.display = 'none';
+            resultsScreen.style.display = 'block';
+            document.getElementById('final-score-val').innerText = score;
+            document.getElementById('total-score-val').innerText = currentQuizData.length;
+        }
+
+        restartBtn.addEventListener('click', () => {
+            startQuiz(currentImageFilter);
+        });
+
+        // تشغيل الاختبار الشامل مباشرة عند تحميل الصفحة
+        startQuiz('all');
+
+        // Theme Toggle Logic
+        const themeBtnIcon = document.querySelector('#theme-toggle i');
+        
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                themeBtnIcon.className = 'fa-solid fa-moon';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeBtnIcon.className = 'fa-solid fa-sun';
+            }
+        }
+
+        // Initialize Theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeBtnIcon.className = 'fa-solid fa-sun';
+        }
+
+        // Fullscreen Logic
+        const fsBtnIcon = document.querySelector('#fullscreen-toggle i');
+        
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                fsBtnIcon.className = 'fa-solid fa-compress';
+            } else {
+                fsBtnIcon.className = 'fa-solid fa-expand';
+            }
+        });
+
+    </script>
+</body>
+</html>
